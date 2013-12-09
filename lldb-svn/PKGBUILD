@@ -5,8 +5,8 @@
 
 pkgname=lldb-svn
 _gcc_ver=4.6.2
-pkgver=193092
-pkgrel=2
+pkgver=196774
+pkgrel=1
 pkgdesc="The LLDB Debugger"
 arch=('i686' 'x86_64')
 url="http://llvm.org/"
@@ -19,11 +19,15 @@ source=(
   'llvm::svn+http://llvm.org/svn/llvm-project/llvm/trunk'
   'cfe::svn+http://llvm.org/svn/llvm-project/cfe/trunk'
   'lldb::svn+http://llvm.org/svn/llvm-project/lldb/trunk'
+  sin_len.patch
+  usr_bin_env_python.patch
 )
 sha256sums=(
   'SKIP'
   'SKIP'
   'SKIP'
+  '0fe0b8ac04412a94b305754a2d1417411d8de3077ed0bac0df75a8d4fbb3591c'
+  '139bbfb4113bf147b9cfcf5b74f0fb17239db476d0f357ccdefb85453c0023ce'
 )
 
 pkgver() {
@@ -37,6 +41,13 @@ build() {
   svn export cfe llvm/tools/clang &> /dev/null
   msg2 "Exporting LLDB in the LLVM tree ..."
   svn export lldb llvm/tools/lldb &> /dev/null
+
+  msg2 "Applying linux-temporary patches ..."
+
+  cd "$srcdir/llvm"
+
+  patch -p1 < ../sin_len.patch
+  patch -p1 < ../usr_bin_env_python.patch
 
   cd "$srcdir/llvm/tools/lldb"
 
@@ -58,6 +69,7 @@ build() {
   cmake \
     -DCMAKE_INSTALL_PREFIX=/usr \
     -DCMAKE_BUILD_TYPE=Release \
+    -DLLVM_ENABLE_CXX11=ON \
     -LLVM_ENABLE_ASSERTIONS=OFF \
     -LLVM_ENABLE_FFI=ON \
     -DPYTHON_EXECUTABLE=/usr/bin/python2 \
