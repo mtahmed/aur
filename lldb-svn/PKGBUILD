@@ -5,7 +5,7 @@
 
 pkgname=lldb-svn
 _gcc_ver=4.6.2
-pkgver=196774
+pkgver=196543
 pkgrel=1
 pkgdesc="The LLDB Debugger"
 arch=('i686' 'x86_64')
@@ -16,22 +16,20 @@ makedepends=('svn' 'cmake' 'swig')
 provides=('lldb')
 conflicts=('lldb')
 source=(
-  'llvm::svn+http://llvm.org/svn/llvm-project/llvm/trunk'
-  'cfe::svn+http://llvm.org/svn/llvm-project/cfe/trunk'
-  'lldb::svn+http://llvm.org/svn/llvm-project/lldb/trunk'
-  sin_len.patch
-  usr_bin_env_python.patch
+  'llvm::svn+http://llvm.org/svn/llvm-project/llvm/trunk#revision=196543'
+  'cfe::svn+http://llvm.org/svn/llvm-project/cfe/trunk#revision=196543'
+  'lldb::svn+http://llvm.org/svn/llvm-project/lldb/trunk#revision=196543'
+  'usr_bin_env_python.patch'
 )
 sha256sums=(
   'SKIP'
   'SKIP'
   'SKIP'
-  '0fe0b8ac04412a94b305754a2d1417411d8de3077ed0bac0df75a8d4fbb3591c'
   '139bbfb4113bf147b9cfcf5b74f0fb17239db476d0f357ccdefb85453c0023ce'
 )
 
 pkgver() {
-  cd "$SRCDEST/llvm"
+  cd "$srcdir/lldb"
   echo $(svnversion)
 }
 
@@ -46,7 +44,6 @@ build() {
 
   cd "$srcdir/llvm"
 
-  patch -p1 < ../sin_len.patch
   patch -p1 < ../usr_bin_env_python.patch
 
   cd "$srcdir/llvm/tools/lldb"
