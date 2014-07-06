@@ -79,8 +79,9 @@ package() {
 
   cd "$srcdir/llvm/build"
 
-  # Install the lldb binary
+  # Install the lldb binaries
   install -Dm755 bin/lldb "$pkgdir/usr/bin/lldb"
+  install -Dm755 bin/lldb-gdbserver "$pkgdir/usr/bin/lldb-gdbserver"
 
   # Install the lldb library
   install -Dm755 lib/liblldb.so "$pkgdir/usr/lib/liblldb.so"
