@@ -13,7 +13,7 @@ arch=('i686' 'x86_64')
 url="http://llvm.org/"
 license=('custom:University of Illinois/NCSA')
 depends=('gcc-libs' 'libffi' 'python2' "gcc>=$_gcc_ver" 'libedit' 'llvm' 'clang')
-makedepends=('svn' 'cmake' 'swig')
+makedepends=('svn' 'cmake' 'swig' 'rsync')
 provides=('lldb')
 conflicts=('lldb')
 source=(
@@ -94,6 +94,10 @@ package() {
 
   # Relink the _lldb.so for python
   ln -sf /usr/lib/liblldb.so "$python_dir/lldb/_lldb.so"
+
+  # Install the lldb headers
+  mkdir -p "$pkgdir/usr/include"
+  rsync -rl --exclude=Makefile "$srcdir/lldb/include/lldb" "$pkgdir/usr/include"
 }
 
 # vim:set sts=2 sw=2 et:
